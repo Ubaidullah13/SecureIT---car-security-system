@@ -42,6 +42,6 @@ void loop()
   }
   Serial.println("");
 
-  // Wait a bit before scanning again
+  // delay
   delay(5000);
 }
