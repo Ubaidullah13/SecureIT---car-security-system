@@ -1,18 +1,5 @@
-/*************************************************************
-
-  Blynk using a LED widget on your phone!
-
-  App project setup:
-    LED widget on V1
- *************************************************************/
-
-// Template ID, Device Name and Auth Token are provided by the Blynk.Cloud
-// See the Device Info tab, or Template settings
-// #define BLYNK_TEMPLATE_ID "TMPLaaRHj-7a"
-// #define BLYNK_DEVICE_NAME "Test"
 #define BLYNK_AUTH_TOKEN "Your Auth Token"
 
-// Comment this out to disable prints and save space
 #define BLYNK_PRINT Serial
 
 #include <WiFi.h>
@@ -28,6 +15,7 @@ char pass[] = "Your Password";
 
 int led1 = 23;
 
+// ALTERNATE METHOD
 // WidgetLED led(V2);
 
 // BlynkTimer timer;
@@ -56,11 +44,7 @@ void setup()
 
   Blynk.begin(auth, ssid, pass);
   pinMode(led1, OUTPUT);
-  // You can also specify server:
-  //Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
-  //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8080);
-
-  //timer.setInterval(1000L, blinkLedWidget);
+  
 }
 
 void loop()
