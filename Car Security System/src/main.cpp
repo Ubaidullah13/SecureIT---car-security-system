@@ -102,35 +102,47 @@ void loop()
   if (Firebase.ready() && (millis() - sendDataPrevMillis > 100 || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis();
-
-    if (Firebase.RTDB.getInt(&fbdo, "/test/int"))
-
+    if (Firebase.RTDB.setInt(&fbdo, "Lock/int", LockSignal))
     {
-
-      if (fbdo.dataType() == "int")
-      {
-
-        read_data = fbdo.intData();
-        if (read_data == 0)
-        {
-          Serial.print("FALSE");
-          Serial.println(read_data); // print the data received from the Firebase database
-          digitalWrite(2, LOW);
-        }
-        else
-        {
-          Serial.print("TRUE");
-          digitalWrite(2, HIGH);
-        }
-      }
+      Serial.println("PASSED");
+      Serial.println("PATH: " + fbdo.dataPath());
+      Serial.println("TYPE: " + fbdo.dataType());
+      LockSignal++;
     }
-
     else
-
     {
-
-      Serial.println(fbdo.errorReason()); // print he error (if any)
+      Serial.println("FAILED");
+      Serial.println("REASON: " + fbdo.errorReason());
     }
+
+    // if (Firebase.RTDB.getInt(&fbdo, "/test/int"))
+
+    // {
+
+    //   if (fbdo.dataType() == "int")
+    //   {
+
+    //     read_data = fbdo.intData();
+    //     if (read_data == 0)
+    //     {
+    //       Serial.print("FALSE");
+    //       Serial.println(read_data); // print the data received from the Firebase database
+    //       digitalWrite(2, LOW);
+    //     }
+    //     else
+    //     {
+    //       Serial.print("TRUE");
+    //       digitalWrite(2, HIGH);
+    //     }
+    //   }
+    // }
+
+    // else
+
+    // {
+
+    //   Serial.println(fbdo.errorReason()); // print he error (if any)
+    // }
   }
 
   // Firebase.ready() should be called repeatedly to handle authentication tasks.
