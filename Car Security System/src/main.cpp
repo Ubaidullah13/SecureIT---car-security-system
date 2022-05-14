@@ -13,23 +13,21 @@
 // Provide the RTDB payload printing info and other helper functions.
 #include <addons/RTDBHelper.h>
 
-/* 1. Define the WiFi credentials */
+// Wifi credentials
 #define WIFI_SSID "I-14/1"
 #define WIFI_PASSWORD "I141@NewCity"
 
-// For the following credentials, see examples/Authentications/SignInAsUser/EmailPassword/EmailPassword.ino
-
-/* 2. Define the API Key */
+// Database API key
 #define API_KEY "AIzaSyAso44Edq1o-gxeRiiTygxmR3k5vPpG384"
 
-/* 3. Define the RTDB URL */
-#define DATABASE_URL "esp32-b7a00-default-rtdb.firebaseio.com" //<databaseName>.firebaseio.com or <databaseName>.<region>.firebasedatabase.app
+// Database URL
+#define DATABASE_URL "esp32-b7a00-default-rtdb.firebaseio.com"
 
-/* 4. Define the user Email and password that already registred or added in project */
+// Registered User Email and Password
 #define USER_EMAIL "ubaid.99es@gmail.com"
 #define USER_PASSWORD "TestEsp32"
 
-// Project variables
+// variables
 #define Lock 22
 #define Door 21
 #define Relay 19
@@ -102,20 +100,67 @@ void loop()
   if (Firebase.ready() && (millis() - sendDataPrevMillis > 100 || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis();
-    if (Firebase.RTDB.setInt(&fbdo, "Lock/int", LockSignal))
+    // if (Firebase.RTDB.setInt(&fbdo, "Lock/int", 1))
+    // {
+    //   // Serial.println("PASSED");
+    //   // Serial.println("PATH: " + fbdo.dataPath());
+    //   // Serial.println("TYPE: " + fbdo.dataType());
+    //   Serial.print("True ");
+    //   Serial.println(read_data); // print the data received from the Firebase database
+    //   digitalWrite(2, HIGH);
+    // }
+    // else
+    // {
+    //   Serial.println("FAILED");
+    //   Serial.println("REASON: " + fbdo.errorReason());
+    // }
+
+    if (Firebase.RTDB.getInt(&fbdo, "/test/int"))
+
     {
-      Serial.println("PASSED");
-      Serial.println("PATH: " + fbdo.dataPath());
-      Serial.println("TYPE: " + fbdo.dataType());
-      LockSignal++;
-    }
-    else
-    {
-      Serial.println("FAILED");
-      Serial.println("REASON: " + fbdo.errorReason());
+
+      if (fbdo.dataType() == "int")
+      {
+
+        read_data = fbdo.intData();
+        if (read_data == 0)
+        {
+          if (Firebase.RTDB.setInt(&fbdo, "Lock/int", 0))
+          {
+            // Serial.println("PASSED");
+            // Serial.println("PATH: " + fbdo.dataPath());
+            // Serial.println("TYPE: " + fbdo.dataType());
+            Serial.print("False ");
+            Serial.println(read_data); // print the data received from the Firebase database
+            digitalWrite(2, LOW);
+          }
+          else
+          {
+            Serial.println("FAILED");
+            Serial.println("REASON: " + fbdo.errorReason());
+          }
+        }
+        else if (read_data == 1)
+        {
+          if (Firebase.RTDB.setInt(&fbdo, "Lock/int", 1))
+          {
+            // Serial.println("PASSED");
+            // Serial.println("PATH: " + fbdo.dataPath());
+            // Serial.println("TYPE: " + fbdo.dataType());
+            Serial.print("TRUE ");
+            Serial.println(read_data); // print the data received from the Firebase database
+            digitalWrite(2, HIGH);
+          }
+          else
+          {
+            Serial.println("FAILED");
+            Serial.println("REASON: " + fbdo.errorReason());
+          }
+        }
+      }
     }
 
-    // if (Firebase.RTDB.getInt(&fbdo, "/test/int"))
+    // if (Firebase.RTDB.getInt(&fbdo, "/user/start"))
 
     // {
 
