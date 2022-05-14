@@ -38,27 +38,32 @@ TextView engineSt;
 TextView MSG;
 String status;
 int val;
-//https://www.androidhive.info/2016/10/android-working-with-firebase-realtime-database/
 long maxid = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Setting values to variables
         btnOFF = findViewById(R.id.OFF);
         btnON = findViewById(R.id.ON);
         btnReset = findViewById(R.id.RESET);
         firebaseInstance = FirebaseDatabase.getInstance();
         engineSt = (TextView) findViewById(R.id.EngineStatus);
         MSG = (TextView) findViewById(R.id.msg);
+
+        // Setting Firebase and its instance reference
         databaseReference= FirebaseDatabase.getInstance().getReference();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+       // FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+        // Checking Engine Status by reading data from Firebase
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 status =dataSnapshot.child("user").child("start").getValue().toString();
                 engineSt.setText(status);
                 if(status.equals("1")){
-                    notification();
+                    notification(); // Push Notification
                     engineSt.setText("Disabled!");
                     MSG.setText("Press reset to initialise the system");
                 }
@@ -67,18 +72,21 @@ long maxid = 0;
                     MSG.setText("");
                 }
             }
-            @Override
+            @Override   // Error Handling
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
 
+        // Car Lock
         btnOFF.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 firebaseInstance.getReference("user").child("start").setValue(0);
             }
         }));
+
+        // Car unlock
         btnON.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +94,7 @@ long maxid = 0;
             }
         }));
 
+        // System reset
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,6 +107,7 @@ long maxid = 0;
         });
     }
 
+    // Push Notification
     private void notification(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             Intent intent = new Intent(this, MainActivity.class);
