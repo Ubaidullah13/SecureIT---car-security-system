@@ -14,20 +14,20 @@
 #include <addons/RTDBHelper.h>
 
 // WiFi credentials
-#define WIFI_SSID "I-14/1"
-#define WIFI_PASSWORD "I141@NewCity"
+#define WIFI_SSID "SSID"
+#define WIFI_PASSWORD "PASSWORD"
 
 // For the following credentials, see examples/Authentications/SignInAsUser/EmailPassword/EmailPassword.ino
 
 // API Key
-#define API_KEY "AIzaSyAso44Edq1o-gxeRiiTygxmR3k5vPpG384"
+#define API_KEY "API KEY"
 
 // Define the RTDB URL
-#define DATABASE_URL "esp32-b7a00-default-rtdb.firebaseio.com" //<databaseName>.firebaseio.com or <databaseName>.<region>.firebasedatabase.app
+#define DATABASE_URL "DATABASE" //<databaseName>.firebaseio.com or <databaseName>.<region>.firebasedatabase.app
 
 // User Email and password that already registred or added in project
-#define USER_EMAIL "ubaid.99es@gmail.com"
-#define USER_PASSWORD "TestEsp32"
+#define USER_EMAIL "Registered Email"
+#define USER_PASSWORD "PASSWORD"
 
 // Project variables
 #define Lock 22
@@ -96,15 +96,6 @@ void setup()
 
   Firebase.setDoubleDigits(5);
 
-  // if (Firebase.signUp(&config, &auth, "", ""))
-  // {
-  //   Serial.println("OK");
-  //   signupOK = true;
-  // }
-  // else
-  // {
-  //   Serial.printf("%s\n", config.signer.signupError.message.c_str());
-  // }
 }
 
 void loop()
