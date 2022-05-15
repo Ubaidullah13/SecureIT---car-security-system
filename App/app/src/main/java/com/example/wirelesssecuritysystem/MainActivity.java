@@ -29,8 +29,8 @@ import org.w3c.dom.Text;
 
 
 public class MainActivity extends AppCompatActivity {
-Button btnON;
-Button btnOFF;
+Button Lock;
+Button Unlock;
 Button btnReset;
 DatabaseReference databaseReference;
 FirebaseDatabase firebaseInstance;
@@ -45,8 +45,8 @@ long maxid = 0;
         setContentView(R.layout.activity_main);
 
         // Setting values to variables
-        btnOFF = findViewById(R.id.OFF);
-        btnON = findViewById(R.id.ON);
+        Unlock = findViewById(R.id.unlock);
+        Lock = findViewById(R.id.lock);
         btnReset = findViewById(R.id.RESET);
         firebaseInstance = FirebaseDatabase.getInstance();
         engineSt = (TextView) findViewById(R.id.EngineStatus);
@@ -79,7 +79,7 @@ long maxid = 0;
         });
 
         // Car Lock
-        btnOFF.setOnClickListener((new View.OnClickListener() {
+        Lock.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 firebaseInstance.getReference("user").child("start").setValue(0);
@@ -87,7 +87,7 @@ long maxid = 0;
         }));
 
         // Car unlock
-        btnON.setOnClickListener((new View.OnClickListener() {
+        Unlock.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 firebaseInstance.getReference("user").child("start").setValue(1);
