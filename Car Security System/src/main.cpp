@@ -34,18 +34,17 @@
 #define RELAY 19
 
 // Signal Variable
+int secureSignal = 0;
 int lockSignal = 0;
 int doorSignal = 0;
 int engineSignal = 0;
+int resetSignal = 0;
 
 // Firebase Data object
 FirebaseData fbdo;
 
 FirebaseAuth auth;
 FirebaseConfig config;
-
-int read_data = 0;
-int n = 0;
 
 unsigned long sendDataPrevMillis = 0;
 // unsigned long count = 0;
@@ -114,25 +113,130 @@ void loop()
   {
     sendDataPrevMillis = millis(); // For delay
 
-    // Write Data
-    if (Firebase.RTDB.setInt(&fbdo, "test/int", n))
+    // Secure Lock -> when this is 1, car will be fully locked and engine stoped until reset with app
+    Firebase.RTDB.getInt(&fbdo, "/SecureLock/status");
+    secureSignal = fbdo.intData();
+
+    if (secureSignal == 1)
     {
-      Serial.println("PASSED");
-      n++;
+      // digitalWrite(LOCK, LOW);
+      // digitalWrite(DOOR, LOW);
+      digitalWrite(RELAY, HIGH);
+      if (Firebase.RTDB.setInt(&fbdo, "Engine/status", 1))
+      {
+        Serial.println("Fully Secured");
+        Serial.println("");
+      }
+      else
+      {
+        Serial.println("FAILED -> REASON: " + fbdo.errorReason());
+      }
     }
     else
     {
-      Serial.println("FAILED -> REASON: " + fbdo.errorReason());
+      // Read Lock Signal
+      lockSignal = digitalRead(LOCK);
+      if (lockSignal == LOW) // Car Locked
+      {
+        Serial.println("Car Locked");
+
+        // Read Door Signal
+        doorSignal = digitalRead(DOOR);
+        // Door Opened
+        if (doorSignal == HIGH)
+        {
+          Serial.println("Illegal Door Opening");
+          digitalWrite(RELAY, HIGH);
+          if (Firebase.RTDB.setInt(&fbdo, "Engine/status", 1))
+          {
+            Serial.println("Owner Notified");
+            Serial.println("");
+          }
+          else
+          {
+            Serial.println("FAILED -> REASON: " + fbdo.errorReason());
+          }
+        }
+
+        // Door Closed
+        else
+        {
+          Serial.println("Door Closed");
+
+          // Read Engine Signal
+          engineSignal = digitalRead(ENGINE);
+          // Engine starts Illegal
+          if (engineSignal == HIGH)
+          {
+            Serial.println("Alert! Engine: ON");
+            digitalWrite(RELAY, HIGH);
+            if (Firebase.RTDB.setInt(&fbdo, "Engine/status", 1))
+            {
+              Serial.println("Owner Notified");
+              Serial.println("");
+            }
+            else
+            {
+              Serial.println("FAILED -> REASON: " + fbdo.errorReason());
+            }
+          }
+
+          // Engine OFF
+          else
+          {
+            Serial.println("Engine: OFF");
+            Serial.println("");
+          }
+        }
+      }
+
+      // Car Unlocked
+      else
+      {
+        Serial.println("Car UnLocked");
+        Serial.println("");
+      }
     }
 
-    // Read Data
-    if (Firebase.RTDB.getInt(&fbdo, "/test/int"))
+    // Reset Back to Normal
+    if (Firebase.RTDB.getInt(&fbdo, "/Reset/status"))
     {
-      read_data = fbdo.intData();
-      if (read_data == 5)
+      resetSignal = fbdo.intData();
+      if (resetSignal == HIGH)
       {
-        Serial.println("Data is: " + read_data);
+        digitalWrite(RELAY, LOW);
+        if (Firebase.RTDB.setInt(&fbdo, "Engine/status", 0))
+        {
+          Serial.println("Engine Reset");
+          Serial.println("");
+        }
+        else
+        {
+          Serial.println("FAILED -> REASON: " + fbdo.errorReason());
+        }
       }
     }
   }
 }
+
+// // Write Data
+// if (Firebase.RTDB.setInt(&fbdo, "test/int", n))
+// {
+//   Serial.println("PASSED");
+//   n++;
+// }
+// else
+// {
+//   Serial.println("FAILED -> REASON: " + fbdo.errorReason());
+// }
+
+// // Read Data
+// if (Firebase.RTDB.getInt(&fbdo, "/test/int"))
+// {
+//   read_data = fbdo.intData();
+//   if (read_data == 0)
+//   {
+//     Serial.print("Data is: ");
+//     Serial.print(read_data);
+//   }
+// }
