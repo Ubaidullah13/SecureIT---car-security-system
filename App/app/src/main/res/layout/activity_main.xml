@@ -8,39 +8,38 @@
     tools:context=".MainActivity">
 
 
-    <Button
-        android:id="@+id/unlock"
-        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
-        android:layout_width="150dp"
-        android:textAlignment="center"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:backgroundTint="#FEE715"
-        android:text="UnLock"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        app:icon="@drawable/unlock"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.548" />
+<!--    <Button-->
+<!--        android:id="@+id/unlock"-->
+<!--        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"-->
+<!--        android:layout_width="150dp"-->
+<!--        android:textAlignment="center"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="4dp"-->
+<!--        android:backgroundTint="#FEE715"-->
+<!--        android:text="UnLock"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="15dp"-->
+<!--        app:icon="@drawable/unlock"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/imageView3"-->
+<!--        app:layout_constraintVertical_bias="0.548" />-->
 
     <Button
-        android:id="@+id/lock"
+        android:id="@+id/SecureLock"
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:layout_marginEnd="4dp"
         android:backgroundTint="#FEE715"
-        android:text="Lock"
+        android:text="Secure Lock"
         android:textColor="@color/black"
-        android:textSize="15dp"
+        android:textSize="20dp"
         app:icon="@drawable/lock"
-        app:layout_constraintBottom_toBottomOf="@+id/unlock"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/unlock"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_marginTop="200dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <Button
         android:id="@+id/RESET"
@@ -84,6 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />

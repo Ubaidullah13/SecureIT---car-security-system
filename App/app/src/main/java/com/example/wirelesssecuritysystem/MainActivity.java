@@ -30,7 +30,7 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 Button Lock;
-Button Unlock;
+//Button Unlock;
 Button btnReset;
 DatabaseReference databaseReference;
 FirebaseDatabase firebaseInstance;
@@ -45,8 +45,8 @@ long maxid = 0;
         setContentView(R.layout.activity_main);
 
         // Setting values to variables
-        Unlock = findViewById(R.id.unlock);
-        Lock = findViewById(R.id.lock);
+        //Unlock = findViewById(R.id.unlock);
+        Lock = findViewById(R.id.SecureLock);
         btnReset = findViewById(R.id.RESET);
         firebaseInstance = FirebaseDatabase.getInstance();
         engineSt = (TextView) findViewById(R.id.EngineStatus);
@@ -60,7 +60,7 @@ long maxid = 0;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                status =dataSnapshot.child("user").child("start").getValue().toString();
+                status =dataSnapshot.child("Engine").child("status").getValue().toString();
                 engineSt.setText(status);
                 if(status.equals("1")){
                     notification(); // Push Notification
@@ -78,31 +78,29 @@ long maxid = 0;
             }
         });
 
-        // Car Lock
+        // Secure Lock
         Lock.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firebaseInstance.getReference("user").child("start").setValue(0);
+                firebaseInstance.getReference("SecureLock").child("status").setValue(1);
             }
         }));
 
-        // Car unlock
-        Unlock.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                firebaseInstance.getReference("user").child("start").setValue(1);
-            }
-        }));
+//        // Car unlock
+//        Unlock.setOnClickListener((new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                firebaseInstance.getReference("user").child("start").setValue(1);
+//            }
+//        }));
 
         // System reset
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firebaseInstance.getReference("Door").child("int").setValue(0);
-                firebaseInstance.getReference("EngineStarts").child("int").setValue(0);
-                firebaseInstance.getReference("Lock").child("int").setValue(0);
-                firebaseInstance.getReference("test").child("int").setValue(0);
-                firebaseInstance.getReference("user").child("start").setValue(0);
+                firebaseInstance.getReference("SecureLock").child("status").setValue(0);
+                //firebaseInstance.getReference("Engine").child("status").setValue(0);
+                firebaseInstance.getReference("Reset").child("status").setValue(1);
             }
         });
     }

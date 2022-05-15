@@ -209,6 +209,7 @@ void loop()
         {
           Serial.println("Engine Reset");
           Serial.println("");
+          Firebase.RTDB.setInt(&fbdo, "Reset/status", 0);
         }
         else
         {
