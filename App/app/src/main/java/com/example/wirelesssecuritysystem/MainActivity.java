@@ -30,14 +30,15 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 Button Lock;
-//Button Unlock;
 Button btnReset;
 DatabaseReference databaseReference;
 FirebaseDatabase firebaseInstance;
 TextView engineSt;
 TextView MSG;
+TextView SecureText;
 String status;
-int val;
+String SecureStatus;
+int val = 0;
 long maxid = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +46,12 @@ long maxid = 0;
         setContentView(R.layout.activity_main);
 
         // Setting values to variables
-        //Unlock = findViewById(R.id.unlock);
         Lock = findViewById(R.id.SecureLock);
         btnReset = findViewById(R.id.RESET);
         firebaseInstance = FirebaseDatabase.getInstance();
         engineSt = (TextView) findViewById(R.id.EngineStatus);
         MSG = (TextView) findViewById(R.id.msg);
+        SecureText = (TextView) findViewById(R.id.secureText);
 
         // Setting Firebase and its instance reference
         databaseReference= FirebaseDatabase.getInstance().getReference();
@@ -61,6 +62,9 @@ long maxid = 0;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 status =dataSnapshot.child("Engine").child("status").getValue().toString();
+                SecureStatus =dataSnapshot.child("SecureLock").child("status").getValue().toString();
+                if(SecureStatus.equals("0"))
+                {
                 engineSt.setText(status);
                 if(status.equals("1")){
                     notification(); // Push Notification
@@ -70,6 +74,11 @@ long maxid = 0;
                 else{
                     engineSt.setText("Enable");
                     MSG.setText("");
+                }
+            }
+                else{
+                    engineSt.setText("Secured");
+                    MSG.setText("Reset to Enable Engine");
                 }
             }
             @Override   // Error Handling
@@ -83,24 +92,18 @@ long maxid = 0;
             @Override
             public void onClick(View view) {
                 firebaseInstance.getReference("SecureLock").child("status").setValue(1);
+                SecureText.setText("Vehicle is now Fully Secured");
             }
         }));
-
-//        // Car unlock
-//        Unlock.setOnClickListener((new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                firebaseInstance.getReference("user").child("start").setValue(1);
-//            }
-//        }));
 
         // System reset
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firebaseInstance.getReference("SecureLock").child("status").setValue(0);
-                //firebaseInstance.getReference("Engine").child("status").setValue(0);
+                firebaseInstance.getReference("Engine").child("status").setValue(0);
                 firebaseInstance.getReference("Reset").child("status").setValue(1);
+                SecureText.setText("Secure Lock: OFF");
+                firebaseInstance.getReference("SecureLock").child("status").setValue(0);
             }
         });
     }

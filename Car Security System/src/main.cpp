@@ -47,12 +47,7 @@ FirebaseAuth auth;
 FirebaseConfig config;
 
 unsigned long sendDataPrevMillis = 0;
-// unsigned long count = 0;
-// int intValue;
 
-// int engineCount = 0;
-// int doorCount = 0;
-// int LockCount = 0;
 void setup()
 {
 
@@ -65,6 +60,7 @@ void setup()
 
   // Output Pins -> Signal from ESP towards Component
   pinMode(RELAY, OUTPUT);
+  pinMode(2, OUTPUT); // This internal LED represents Vehicle internal locking system  -> Secure Lock LED
 
   //  pinMode(2, OUTPUT);
 
@@ -119,9 +115,8 @@ void loop()
 
     if (secureSignal == 1)
     {
-      // digitalWrite(LOCK, LOW);
-      // digitalWrite(DOOR, LOW);
       digitalWrite(RELAY, HIGH);
+      digitalWrite(2, HIGH);
       if (Firebase.RTDB.setInt(&fbdo, "Engine/status", 1))
       {
         Serial.println("Fully Secured");
@@ -191,7 +186,7 @@ void loop()
       }
 
       // Car Unlocked
-      else
+      else if (lockSignal == HIGH)
       {
         Serial.println("Car UnLocked");
         Serial.println("");
@@ -205,6 +200,7 @@ void loop()
       if (resetSignal == HIGH)
       {
         digitalWrite(RELAY, LOW);
+        digitalWrite(2, LOW);
         if (Firebase.RTDB.setInt(&fbdo, "Engine/status", 0))
         {
           Serial.println("Engine Reset");

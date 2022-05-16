@@ -126,4 +126,15 @@
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
 
+    <TextView
+        android:id="@+id/secureText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/SecureLock"
+        app:layout_constraintStart_toStartOf="@+id/SecureLock"
+        app:layout_constraintTop_toBottomOf="@+id/SecureLock" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
