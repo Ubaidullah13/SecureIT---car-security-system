@@ -14,18 +14,18 @@
 #include <addons/RTDBHelper.h>
 
 // Wifi credentials
-#define WIFI_SSID "I-14/1"
-#define WIFI_PASSWORD "I141@NewCity"
+#define WIFI_SSID "SSID"
+#define WIFI_PASSWORD "PASSWORD"
 
 // Database API key
-#define API_KEY "AIzaSyAso44Edq1o-gxeRiiTygxmR3k5vPpG384"
+#define API_KEY "API KEY"
 
 // Database URL
-#define DATABASE_URL "esp32-b7a00-default-rtdb.firebaseio.com"
+#define DATABASE_URL "DATABASE URL"
 
 // Registered User Email and Password
-#define USER_EMAIL "ubaid.99es@gmail.com"
-#define USER_PASSWORD "TestEsp32"
+#define USER_EMAIL "REGISTERED EMAIL"
+#define USER_PASSWORD "PASSWORD"
 
 // PINS
 #define LOCK 23
@@ -105,7 +105,7 @@ void setup()
 void loop()
 {
   // Getting Firebase Ready and delay
-  if (Firebase.ready() && (millis() - sendDataPrevMillis > 500 || sendDataPrevMillis == 0))
+  if (Firebase.ready() && (millis() - sendDataPrevMillis > 700 || sendDataPrevMillis == 0))
   {
     sendDataPrevMillis = millis(); // For delay
 
@@ -199,10 +199,10 @@ void loop()
       resetSignal = fbdo.intData();
       if (resetSignal == HIGH)
       {
-        digitalWrite(RELAY, LOW);
-        digitalWrite(2, LOW);
         if (Firebase.RTDB.setInt(&fbdo, "Engine/status", 0))
         {
+          digitalWrite(RELAY, LOW);
+          digitalWrite(2, LOW);
           Serial.println("Engine Reset");
           Serial.println("");
           Firebase.RTDB.setInt(&fbdo, "Reset/status", 0);
@@ -215,25 +215,3 @@ void loop()
     }
   }
 }
-
-// // Write Data
-// if (Firebase.RTDB.setInt(&fbdo, "test/int", n))
-// {
-//   Serial.println("PASSED");
-//   n++;
-// }
-// else
-// {
-//   Serial.println("FAILED -> REASON: " + fbdo.errorReason());
-// }
-
-// // Read Data
-// if (Firebase.RTDB.getInt(&fbdo, "/test/int"))
-// {
-//   read_data = fbdo.intData();
-//   if (read_data == 0)
-//   {
-//     Serial.print("Data is: ");
-//     Serial.print(read_data);
-//   }
-// }
